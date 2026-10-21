@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedimientos ISO · Instituto Simón Bolívar</title>
+<meta name="description" content="Biblioteca digital de procedimientos, formularios y documentos ISO del Instituto Simón Bolívar.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="bg-video welcome-video"><video autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="assets/videos/fondo%20video.mp4" type="video/mp4"></video></div>
+<div class="cursor-glow" id="cg"></div>
+<section class="hero">
+  <div class="crest"><img src="assets/img/logo.jpg" alt="Instituto Simón Bolívar" onerror="this.parentNode.classList.add('noimg');this.remove()"></div>
+  <p class="eyebrow">Simón Bolívar · El Alto</p>
+  <h1>Biblioteca de<br><em>Procedimientos ISO</em></h1>
+  <p class="sub">Encuentre procedimientos, formularios, manuales y documentos del sistema de gestión de calidad por su código, nombre o carpeta.</p>
+  <a href="biblioteca.html" class="btn btn-gold">Consultar documentos <span>→</span></a>
+  <div class="hero-stats">
+    <div><b id="documentos-count">—</b><span>Documentos</span></div>
+    <div><b id="carpetas-count">—</b><span>Carpetas</span></div>
+    <div><b id="formatos-count">—</b><span>Formatos</span></div>
+  </div>
+  <div class="hero-foot">Instituto Simón Bolívar · Sistema de gestión de calidad</div>
+</section>
+<div class="marquee"><div class="marquee-track" id="mq"></div></div>
+<script>
+const cg=document.getElementById('cg');
+addEventListener('mousemove',e=>{cg.style.left=e.clientX+'px';cg.style.top=e.clientY+'px'});
+const words=['Procedimientos ISO','Formularios','Manuales de funciones','Política de calidad','Instituto Simón Bolívar','El Alto'];
+document.getElementById('mq').innerHTML=[...words,...words,...words,...words].map(w=>`<span>${w} ◆</span>`).join('');
+fetch('data/procedimientos-iso.json').then(r=>{
+  if(!r.ok) throw new Error(`No se pudo cargar el catálogo (${r.status})`);
+  return r.json();
+}).then(docs=>{
+  const valores=[docs.length,new Set(docs.map(d=>d.carpeta)).size,new Set(docs.map(d=>d.formato)).size];
+  ['documentos-count','carpetas-count','formatos-count'].forEach((id,i)=>{
+    document.getElementById(id).textContent=valores[i];
+  });
+}).catch(err=>console.error('Catálogo ISO',err));
+</script>
+</body></html>
